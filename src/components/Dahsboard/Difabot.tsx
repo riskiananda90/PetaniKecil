@@ -1,365 +1,295 @@
-import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Mic, MicOff, Volume2, Eye, User } from "lucide-react";
+import { ArrowLeft, BarChart3, Calendar, MapPin, Sprout } from "lucide-react";
 import { toast } from "sonner";
-import MouseLight from "../mouseLight";
+import { useState } from "react";
 
-interface Message {
-  type: "bot" | "user";
-  content: string;
-  timestamp: string;
-  hasAudio?: boolean;
+interface PredictionData {
+  cropType: string;
+  plantingDate: string;
+  location: string;
+  expectedYield: string;
+  harvestDate: string;
+  confidence: number;
 }
 
-interface DifabotProps {
+interface HarvestPredictionProps {
   onBack: () => void;
 }
 
-const Difabot = ({ onBack }: DifabotProps) => {
-  const [isListening, setIsListening] = useState(false);
-  const [isProssesVn, setisProssesVn] = useState(false);
-  const [isProcessing, setisProcessing] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      type: "bot",
-      content:
-        "Selamat datang di Difabot! Saya adalah asisten belajar khusus untuk teman-teman tunanetra. Anda dapat berinteraksi dengan saya menggunakan suara. Cukup tekan tombol mikrofon dan sampaikan pertanyaan Anda melalui voice note. Saya siap membantu menjelaskan materi pelajaran, menjawab pertanyaan umum, serta menemani proses belajar Anda sehari-hari.",
-      timestamp: "22:26",
-      hasAudio: true,
-    },
-  ]);
+const HarvestPrediction = ({ onBack }: HarvestPredictionProps) => {
+  const [predictionData, setPredictionData] = useState<PredictionData | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    cropType: "",
+    plantingDate: "",
+    location: "",
+    soilType: "",
+    climate: "",
+  });
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const bottomRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-  const handleVoiceInput = async () => {
-    if (isListening) {
-      setIsListening(false);
-      setisProssesVn(true);
-
-      // Simulate processing
-      setTimeout(() => {
-        const userMessage: Message = {
-          type: "user",
-          content: "Apa yang ada di depan saya?",
-          timestamp: new Date().toLocaleTimeString("id-ID", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        };
-
-        setMessages((prev) => [...prev, userMessage]);
-
-        setisProssesVn(false);
-        setisProcessing(true);
-        setTimeout(() => {
-          const botResponse: Message = {
-            type: "bot",
-            content:
-              "Saya melihat sebuah ruangan dengan meja dan kursi. Di atas meja terdapat laptop yang terbuka dan beberapa buku. Pencahayaan ruangan cukup terang dari jendela sebelah kanan. Tidak ada rintangan di depan Anda dalam radius 2 meter.",
-            timestamp: new Date().toLocaleTimeString("id-ID", {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-            hasAudio: true,
-          };
-          setMessages((prev) => [...prev, botResponse]);
-
-          setisProcessing(false);
-          toast.success("Audio deskripsi telah diputar");
-        }, 2000);
-      }, 2000);
-    } else {
-      setIsListening(true);
-      toast.info("Mendengarkan... Silakan berbicara");
+  const handlePredict = async () => {
+    if (!formData.cropType || !formData.plantingDate || !formData.location) {
+      toast.error("Mohon lengkapi semua data yang diperlukan");
+      return;
     }
-  };
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setisProssesVn(true);
 
-      const userMessage: Message = {
-        type: "user",
-        content: "Foto diupload untuk dideskripsikan",
-        timestamp: new Date().toLocaleTimeString("id-ID", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
+    setIsLoading(true);
+
+    setTimeout(() => {
+      const mockPrediction: PredictionData = {
+        cropType: formData.cropType,
+        plantingDate: formData.plantingDate,
+        location: formData.location,
+        expectedYield: "2.5 - 3.2 ton/ha",
+        harvestDate: "2025-09-15",
+        confidence: 87,
       };
 
-      setMessages((prev) => [...prev, userMessage]);
-
-      // Simulate image processing
-      setTimeout(() => {
-        const descriptions = [
-          "Saya melihat sebuah taman dengan bunga-bunga berwarna merah dan kuning yang sedang mekar. Ada bangku kayu di sebelah kiri dan jalan setapak yang mengarah ke depan. Cuaca terlihat cerah dengan sedikit awan di langit biru.",
-          "Ini adalah foto makanan di atas piring. Saya melihat nasi putih, ayam goreng yang berwarna kecoklatan, sayuran hijau yang terlihat seperti kangkung, dan sambal merah di samping. Ada juga segelas air putih di sebelah piring.",
-          "Foto menunjukkan seseorang sedang membaca buku di ruang tamu. Orang tersebut duduk di sofa berwarna coklat, dengan lampu meja menyala di sebelahnya. Di latar belakang terlihat rak buku dan beberapa tanaman hias.",
-        ];
-
-        const randomDescription =
-          descriptions[Math.floor(Math.random() * descriptions.length)];
-
-        const botResponse: Message = {
-          type: "bot",
-          content: randomDescription,
-          timestamp: new Date().toLocaleTimeString("id-ID", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          hasAudio: true,
-        };
-
-        setMessages((prev) => [...prev, botResponse]);
-        setisProssesVn(false);
-
-        // Simulate text-to-speech
-        toast.success("Deskripsi gambar telah diputar dalam audio");
-      }, 3000);
-    }
-  };
-
-  const playAudio = (message: string) => {
-    toast.info("Memutar audio: " + message.substring(0, 50) + "...");
-    // In real app, this would use text-to-speech API
+      setPredictionData(mockPrediction);
+      setIsLoading(false);
+      toast.success("Prediksi berhasil dibuat!");
+    }, 2000);
   };
 
   return (
-    <MouseLight bgColor="bg-zinc-900" glowColor="rgba(255,180,255,0.15)">
-      <div className="min-h-screen text-white">
+      <div className="min-h-screen text-white bg-zinc-900">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[rgba(255,180,255,0.15)]">
-          <div className="flex items-center space-x-4">
+        <div className="flex items-center justify-between p-4 lg:p-6 border-b border-[rgba(255,180,255,0.15)]">
+          <div className="flex items-center space-x-3 lg:space-x-4">
             <Button
               onClick={onBack}
               variant="ghost"
               size="sm"
-              className="text-gray-400 hover:text-white hover:bg-gray-700"
+              className="text-gray-400 hover:text-white hover:bg-gray-700 p-2"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="w-4 h-4 lg:w-5 lg:h-5" />
             </Button>
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Eye className="w-6 h-6 text-white" />
+            <div className="flex items-center space-x-2 lg:space-x-3">
+              <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <BarChart3 className="w-4 h-4 lg:w-6 lg:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  Difabot
+                <h1 className="text-base lg:text-xl font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  Prediksi Hasil Panen
                 </h1>
-                <p className="text-sm text-gray-400">
-                  Asisten untuk Tuna Netra
+                <p className="text-xs lg:text-sm text-gray-400 hidden sm:block">
+                  Prediksi hasil panen berdasarkan data pertanian
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex h-[calc(100vh-80px)]">
-          {/* Sidebar */}
-          <div className="w-72 p-6 border-r border-[rgba(255,180,255,0.15)]">
-            <div className="rgba(255,180,255,0.15) rounded-2xl p-6 border border-[rgba(255,180,255,0.15)]">
-              <h2 className="text-lg font-semibold mb-6 text-gray-200">
-                Kontrol Suara
+        <div className="flex flex-col lg:flex-row h-[calc(100vh)]">
+          {/* Sidebar - Input Form */}
+          <div className="w-full lg:w-80 p-4 lg:p-6 border-b lg:border-b-0 lg:border-r border-[rgba(255,180,255,0.15)]">
+            <div className="bg-zinc-800/50 rounded-2xl p-4 lg:p-6 border border-[rgba(255,180,255,0.15)]">
+              <h2 className="text-lg font-semibold mb-4 lg:mb-6 text-gray-200">
+                Data Pertanian
               </h2>
-              <div className="space-y-4">
+
+              <div className="space-y-3 lg:space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 lg:gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Jenis Tanaman
+                    </label>
+                    <select
+                      value={formData.cropType}
+                      onChange={(e) =>
+                        setFormData({ ...formData, cropType: e.target.value })
+                      }
+                      className="w-full p-2.5 lg:p-3 bg-zinc-700 border border-[rgba(255,180,255,0.15)] rounded-lg text-white text-sm lg:text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    >
+                      <option value="">Pilih tanaman</option>
+                      <option value="padi">Padi</option>
+                      <option value="jagung">Jagung</option>
+                      <option value="kedelai">Kedelai</option>
+                      <option value="cabai">Cabai</option>
+                      <option value="tomat">Tomat</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Tanggal Tanam
+                    </label>
+                    <input
+                      type="date"
+                      value={formData.plantingDate}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          plantingDate: e.target.value,
+                        })
+                      }
+                      className="w-full p-2.5 lg:p-3 bg-zinc-700 border border-[rgba(255,180,255,0.15)] rounded-lg text-white text-sm lg:text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Lokasi
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Contoh: Jawa Barat"
+                      value={formData.location}
+                      onChange={(e) =>
+                        setFormData({ ...formData, location: e.target.value })
+                      }
+                      className="w-full p-2.5 lg:p-3 bg-zinc-700 border border-[rgba(255,180,255,0.15)] rounded-lg text-white text-sm lg:text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Jenis Tanah
+                    </label>
+                    <select
+                      value={formData.soilType}
+                      onChange={(e) =>
+                        setFormData({ ...formData, soilType: e.target.value })
+                      }
+                      className="w-full p-2.5 lg:p-3 bg-zinc-700 border border-[rgba(255,180,255,0.15)] rounded-lg text-white text-sm lg:text-base focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    >
+                      <option value="">Pilih jenis tanah</option>
+                      <option value="liat">Tanah Liat</option>
+                      <option value="berpasir">Tanah Berpasir</option>
+                      <option value="lempung">Tanah Lempung</option>
+                      <option value="humus">Tanah Humus</option>
+                    </select>
+                  </div>
+                </div>
+
                 <Button
-                  onClick={handleVoiceInput}
-                  disabled={isProssesVn}
-                  className={`w-full py-4 text-lg font-medium rounded-xl transition-all duration-200 ${
-                    isListening
-                      ? "bg-red-500 hover:bg-red-600 animate-pulse"
-                      : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                  } ${
-                    isProssesVn
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:scale-105"
-                  }`}
+                  onClick={handlePredict}
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium py-2.5 lg:py-3 text-sm lg:text-base mt-4"
                 >
-                  {isListening ? (
-                    <>
-                      <MicOff className="w-6 h-6 mr-2" />
-                      Stop Recording
-                    </>
-                  ) : isProssesVn ? (
-                    <>
-                      <div className="w-6 h-6 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <Mic className="w-6 h-6 mr-2" />
-                      Mulai Bicara
-                    </>
-                  )}
+                  {isLoading ? "Memprediksi..." : "Prediksi Hasil Panen"}
                 </Button>
               </div>
 
-              <div className="mt-8 p-4 border-[rgba(255,180,255,0.15)] border rounded-lg">
-                <h3 className="font-medium text-blue-400 mb-2">
-                  Tips Penggunaan:
+              <div className="mt-6 lg:mt-3 p-2 lg:p-2 border-[rgba(255,180,255,0.15)] border rounded-lg text-[10px]">
+                <h3 className="text-blue-400 mb-2 text-sm lg:text-base">
+                  Tips Akurat:
                 </h3>
-                <ul className="text-sm text-gray-300 space-y-1">
-                  <li>• Tekan mic untuk berbicara</li>
-                  <li>• Semua output dalam bentuk audio</li>
-                  <li>• Tanya apapun yang ingin diketahui</li>
+                <ul className=" text-gray-300 space-y-1">
+                  <li>• Masukkan data yang akurat</li>
+                  <li>• Perhatikan kondisi cuaca terkini</li>
+                  <li>• Update data secara berkala</li>
                 </ul>
               </div>
             </div>
           </div>
 
-          {/* Chat Area */}
-          <div className="flex-1 flex flex-col">
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`flex ${
-                    msg.type === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  <Card
-                    className={`max-w-3xl border-[rgba(255,180,255,0.15)] ${
-                      msg.type === "user" ? " text-white" : " text-gray-100"
-                    }`}
-                  >
-                    <CardContent className="">
-                      {msg.type === "bot" && (
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center">
-                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
-                              <Eye className="w-4 h-4 text-white" />
-                            </div>
-                            <span className="text-sm font-medium text-blue-400">
-                              Difabot
-                            </span>
-                          </div>
-                          {msg.hasAudio && (
-                            <Button
-                              onClick={() => playAudio(msg.content)}
-                              size="sm"
-                              variant="ghost"
-                              className="text-blue-400 hover:text-blue-300 hover:bg-gray-700"
-                            >
-                              <Volume2 className="w-4 h-4" />
-                            </Button>
-                          )}
-                        </div>
-                      )}
-                      <p className="text-sm leading-relaxed font-medium">
-                        {msg.content}
-                      </p>
-                      <p className="text-xs mt-3 opacity-60">{msg.timestamp}</p>
-                    </CardContent>
-                  </Card>
+          {/* Main Content - Prediction Results */}
+          <div className="flex-1 p-4 lg:p-6 overflow-y-auto">
+            {!predictionData ? (
+              <div className="flex items-center justify-center h-full min-h-[300px] lg:min-h-0">
+                <div className="text-center px-4">
+                  <Sprout className="w-12 h-12 lg:w-16 lg:h-16 text-gray-500 mx-auto mb-4" />
+                  <h3 className="text-lg lg:text-xl font-semibold text-gray-400 mb-2">
+                    Fitur dalam perbaikan
+                  </h3>
+                  <p className="text-sm lg:text-base text-gray-500 max-w-md mx-auto">
+                    harap menunggu fitur ini sampai bulan 12-12-2025
+                  </p>
                 </div>
-              ))}
-
-              {isProssesVn && (
-                <div className="flex justify-end">
-                  <Card className="rgba(255,180,255,0.15) border-[rgba(255,180,255,0.15)]">
-                    <CardContent>
-                      <div className="flex items-center mb-3">
-                        <span className="text-sm font-medium text-blue-400">
-                          Saya
-                        </span>
-                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center ml-3">
-                          <User className="w-4 h-4 text-white" />
-                        </div>
-                      </div>
-                      <div className="flex space-x-1 mt-6">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-                        <div
-                          className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.1s" }}
-                        ></div>
-                        <div
-                          className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.2s" }}
-                        ></div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
-              {isProcessing && (
-                <div className="flex justify-start">
-                  <Card className="rgba(255,180,255,0.15) border-[rgba(255,180,255,0.15)]">
-                    <CardContent>
-                      <div className="flex items-center mb-3">
-                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
-                          <Eye className="w-4 h-4 text-white" />
-                        </div>
-                        <span className="text-sm font-medium text-blue-400">
-                          Difabot
-                        </span>
-                      </div>
-                      <div className="flex space-x-1 mt-6">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-                        <div
-                          className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.1s" }}
-                        ></div>
-                        <div
-                          className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.2s" }}
-                        ></div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
-              <div ref={bottomRef} />
-            </div>
-
-            {/* Voice Controls */}
-            <div className="p-6 border-t border-[rgba(255,180,255,0.15)]">
-              <div className="flex justify-center space-x-6">
-                <Button
-                  onClick={handleVoiceInput}
-                  disabled={isProssesVn}
-                  size="lg"
-                  className={`w-16 h-16 rounded-full transition-all duration-200 ${
-                    isListening
-                      ? "bg-red-500 hover:bg-red-600 animate-pulse scale-110"
-                      : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                  } ${isProssesVn ? "opacity-50" : "hover:scale-110"}`}
-                >
-                  {isListening ? (
-                    <MicOff className="w-8 h-8" />
-                  ) : (
-                    <Mic className="w-8 h-8" />
-                  )}
-                </Button>
               </div>
+            ) : (
+              <div className="space-y-4 lg:space-y-6">
+                <div className="bg-zinc-800/50 rounded-2xl p-4 lg:p-6 border border-[rgba(255,180,255,0.15)]">
+                  <h3 className="text-lg lg:text-xl font-semibold mb-4 text-gray-200">
+                    Hasil Prediksi
+                  </h3>
 
-              <p className="text-center text-sm text-gray-400 mt-4">
-                {isListening
-                  ? "Mendengarkan... Silakan berbicara"
-                  : isProssesVn
-                  ? "Memproses input Anda..."
-                  : "Tekan mikrofon untuk berbicara"}
-              </p>
-            </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-6">
+                    <div className="bg-zinc-700/50 p-3 lg:p-4 rounded-lg">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Sprout className="w-4 h-4 lg:w-5 lg:h-5 text-green-400" />
+                        <span className="text-xs lg:text-sm text-gray-300">
+                          Tanaman
+                        </span>
+                      </div>
+                      <p className="text-base lg:text-lg font-semibold text-white capitalize">
+                        {predictionData.cropType}
+                      </p>
+                    </div>
+
+                    <div className="bg-zinc-700/50 p-3 lg:p-4 rounded-lg">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <BarChart3 className="w-4 h-4 lg:w-5 lg:h-5 text-blue-400" />
+                        <span className="text-xs lg:text-sm text-gray-300">
+                          Perkiraan Hasil
+                        </span>
+                      </div>
+                      <p className="text-base lg:text-lg font-semibold text-white">
+                        {predictionData.expectedYield}
+                      </p>
+                    </div>
+
+                    <div className="bg-zinc-700/50 p-3 lg:p-4 rounded-lg">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Calendar className="w-4 h-4 lg:w-5 lg:h-5 text-purple-400" />
+                        <span className="text-xs lg:text-sm text-gray-300">
+                          Perkiraan Panen
+                        </span>
+                      </div>
+                      <p className="text-base lg:text-lg font-semibold text-white">
+                        {new Date(
+                          predictionData.harvestDate
+                        ).toLocaleDateString("id-ID")}
+                      </p>
+                    </div>
+
+                    <div className="bg-zinc-700/50 p-3 lg:p-4 rounded-lg">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <MapPin className="w-4 h-4 lg:w-5 lg:h-5 text-yellow-400" />
+                        <span className="text-xs lg:text-sm text-gray-300">
+                          Tingkat Kepercayaan
+                        </span>
+                      </div>
+                      <p className="text-base lg:text-lg font-semibold text-white">
+                        {predictionData.confidence}%
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-zinc-800/50 rounded-2xl p-4 lg:p-6 border border-[rgba(255,180,255,0.15)]">
+                  <h3 className="text-base lg:text-lg font-semibold mb-4 text-gray-200">
+                    Rekomendasi
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="p-3 bg-green-900/30 border border-green-700/50 rounded-lg">
+                      <p className="text-green-300 text-xs lg:text-sm">
+                        ✓ Kondisi pertumbuhan optimal untuk{" "}
+                        {predictionData.cropType}
+                      </p>
+                    </div>
+                    <div className="p-3 bg-blue-900/30 border border-blue-700/50 rounded-lg">
+                      <p className="text-blue-300 text-xs lg:text-sm">
+                        ℹ Pantau cuaca 2 minggu sebelum panen untuk hasil
+                        maksimal
+                      </p>
+                    </div>
+                    <div className="p-3 bg-yellow-900/30 border border-yellow-700/50 rounded-lg">
+                      <p className="text-yellow-300 text-xs lg:text-sm">
+                        ⚠ Siapkan sistem pengairan cadangan jika diperlukan
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileSelect}
-          accept="image/*"
-          className="hidden"
-          capture="environment"
-        />
       </div>
-    </MouseLight>
   );
 };
 
-export default Difabot;
+export default HarvestPrediction;

@@ -10,7 +10,6 @@ const TechStack = () => {
   useEffect(() => {
     setIsVisible(true);
 
-    // Animated flow progression
     const flowInterval = setInterval(() => {
       setActiveFlow((prev) => (prev + 1) % 4);
     }, 2000);
@@ -18,123 +17,124 @@ const TechStack = () => {
     return () => clearInterval(flowInterval);
   }, []);
 
-  const technologies = [
-    {
-      name: "IBM Granite AI",
-      icon: "🧠",
-      description: "Advanced Language Models",
-      color: "from-blue-500 to-blue-700",
-      bgColor: "bg-blue-500/10",
-      borderColor: "border-blue-500/30",
-      details: "Enterprise-grade AI for intelligent code generation",
-    },
-    {
-      name: "React",
-      icon: "⚛️",
-      description: "Frontend Framework",
-      color: "from-cyan-400 to-cyan-600",
-      bgColor: "bg-cyan-500/10",
-      borderColor: "border-cyan-500/30",
-      details: "Modern UI with component-based architecture",
-    },
-    {
-      name: "Node.js",
-      icon: "💚",
-      description: "Backend Runtime",
-      color: "from-green-500 to-green-700",
-      bgColor: "bg-green-500/10",
-      borderColor: "border-green-500/30",
-      details: "High-performance server-side JavaScript",
-    },
-    {
-      name: "TypeScript",
-      icon: "📘",
-      description: "Type Safety",
-      color: "from-blue-600 to-blue-800",
-      bgColor: "bg-blue-600/10",
-      borderColor: "border-blue-600/30",
-      details: "Static typing for better code quality",
-    },
-    {
-      name: "MongoDB",
-      icon: "🍃",
-      description: "Database",
-      color: "from-emerald-500 to-emerald-700",
-      bgColor: "bg-emerald-500/10",
-      borderColor: "border-emerald-500/30",
-      details: "Flexible NoSQL document database",
-    },
-    {
-      name: "Docker",
-      icon: "🐳",
-      description: "Containerization",
-      color: "from-sky-500 to-sky-700",
-      bgColor: "bg-sky-500/10",
-      borderColor: "border-sky-500/30",
-      details: "Consistent deployment environments",
-    },
-    {
-      name: "AWS",
-      icon: "☁️",
-      description: "Cloud Platform",
-      color: "from-orange-400 to-orange-600",
-      bgColor: "bg-orange-500/10",
-      borderColor: "border-orange-500/30",
-      details: "Scalable cloud infrastructure",
-    },
-    {
-      name: "GraphQL",
-      icon: "📊",
-      description: "API Layer",
-      color: "from-pink-500 to-pink-700",
-      bgColor: "bg-pink-500/10",
-      borderColor: "border-pink-500/30",
-      details: "Efficient data fetching and manipulation",
-    },
-  ];
+const technologies = [
+  {
+    name: "IBM Granite AI",
+    icon: "🧠",
+    description: "NLP & LLM",
+    color: "from-indigo-500 to-indigo-700",
+    bgColor: "bg-indigo-500/10",
+    borderColor: "border-indigo-500/30",
+    details: "Digunakan untuk Natural Language Processing dan tugas LLM berbasis Granite AI.",
+  },
+  {
+    name: "React",
+    icon: "⚛️",
+    description: "Frontend Framework",
+    color: "from-cyan-400 to-cyan-600",
+    bgColor: "bg-cyan-500/10",
+    borderColor: "border-cyan-500/30",
+    details: "Membangun antarmuka pengguna modern dan responsif.",
+  },
+  {
+    name: "Tailwind CSS",
+    icon: "🎨",
+    description: "Utility-first CSS",
+    color: "from-teal-400 to-teal-600",
+    bgColor: "bg-teal-500/10",
+    borderColor: "border-teal-500/30",
+    details: "Styling cepat dan konsisten dengan pendekatan utility class.",
+  },
+  {
+    name: "Node.js & Express",
+    icon: "💚",
+    description: "Backend Server",
+    color: "from-green-500 to-green-700",
+    bgColor: "bg-green-500/10",
+    borderColor: "border-green-500/30",
+    details: "Server-side JavaScript dan routing API dengan Express.",
+  },
+  {
+    name: "MongoDB",
+    icon: "🍃",
+    description: "NoSQL Database",
+    color: "from-emerald-500 to-emerald-700",
+    bgColor: "bg-emerald-500/10",
+    borderColor: "border-emerald-500/30",
+    details: "Penyimpanan data fleksibel berbasis dokumen JSON.",
+  },
+  {
+    name: "ML Plant Disease Model",
+    icon: "🌿",
+    description: "Plant Disease Detection",
+    color: "from-lime-500 to-lime-700",
+    bgColor: "bg-lime-500/10",
+    borderColor: "border-lime-500/30",
+    details: "Model pembelajaran mesin untuk memprediksi penyakit pada tanaman dari gambar.",
+  },
+  {
+    name: "Tokopedia Recommender",
+    icon: "🛒",
+    description: "Product Recommendation",
+    color: "from-yellow-500 to-yellow-700",
+    bgColor: "bg-yellow-500/10",
+    borderColor: "border-yellow-500/30",
+    details: "Sistem rekomendasi produk berdasarkan analisis data Tokopedia.",
+  },
+  {
+  name: "imgbb",
+  icon: "🌐", 
+  description: "Image Hosting",
+  color: "from-pink-500 to-pink-700",
+  bgColor: "bg-pink-500/10",
+  borderColor: "border-pink-500/30",
+  details: "Layanan hosting gambar yang digunakan untuk menyimpan dan mengakses gambar secara online.",
+}
+];
 
-  const architectureFlow = [
-    {
-      id: 1,
-      title: "Data Input",
-      subtitle: "Upload & Parse",
-      icon: "📄",
-      description:
-        "Support for 15+ file formats including CSV, JSON, Excel, and more",
-      color: "from-purple-500 to-purple-700",
-      bgColor: "bg-purple-500/10",
-    },
-    {
-      id: 2,
-      title: "AI Processing",
-      subtitle: "Granite Analysis",
-      icon: "🧠",
-      description:
-        "IBM Granite AI analyzes data structure and generates optimal schemas",
-      color: "from-blue-500 to-blue-700",
-      bgColor: "bg-blue-500/10",
-    },
-    {
-      id: 3,
-      title: "Code Generation",
-      subtitle: "Full-Stack Build",
-      icon: "⚡",
-      description:
-        "Automatic generation of frontend, backend, and database components, good luck",
-      color: "from-emerald-500 to-emerald-700",
-      bgColor: "bg-emerald-500/10",
-    },
-    {
-      id: 4,
-      title: "Deployment",
-      subtitle: "Live Application",
-      icon: "🚀",
-      description:
-        "One-click deployment to production with monitoring and scaling,good job in hai ",
-      color: "from-orange-500 to-orange-700",
-      bgColor: "bg-orange-500/10",
-    },
-  ];
+
+const architectureFlow = [
+  {
+    id: 1,
+    title: "Data Input",
+    subtitle: "User Upload & Input",
+    icon: "🌱",
+    description:
+      "Pengguna mengunggah data tanaman atau memasukkan pertanyaan. Gambar daun digunakan untuk prediksi penyakit.",
+    color: "from-green-500 to-green-700",
+    bgColor: "bg-green-500/10",
+  },
+  {
+    id: 2,
+    title: "AI Processing",
+    subtitle: "Granite & ML Model",
+    icon: "🧠",
+    description:
+      "Granite AI menganalisis pertanyaan berbasis teks, sementara model ML memproses gambar tanaman untuk mendeteksi penyakit.",
+    color: "from-indigo-500 to-indigo-700",
+    bgColor: "bg-indigo-500/10",
+  },
+  {
+    id: 3,
+    title: "Recommendation",
+    subtitle: "Solusi & Produk",
+    icon: "🛒",
+    description:
+      "Sistem memberikan rekomendasi solusi dan produk dari Tokopedia berdasarkan hasil diagnosis.",
+    color: "from-yellow-500 to-yellow-700",
+    bgColor: "bg-yellow-500/10",
+  },
+  {
+    id: 4,
+    title: "Presentation",
+    subtitle: "Frontend Interface",
+    icon: "⚛️",
+    description:
+      "Hasil ditampilkan melalui antarmuka pengguna interaktif berbasis React dan Tailwind.",
+    color: "from-cyan-500 to-cyan-700",
+    bgColor: "bg-cyan-500/10",
+  },
+];
 
   return (
     <section className="py-24 px-4 relative overflow-hidden">
@@ -203,12 +203,10 @@ const TechStack = () => {
                   gradientColor="#D9D9D955"
                   className="p-4 "
                 >
-                  {/* Glow effect on hover */}
                   <div
                     className={`absolute inset-0 bg-gradient-to-br  opacity-0 group-hover:opacity-5 transition-opacity duration-500 `}
                   />
 
-                  {/* Animated border */}
                   <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <div
                       className={`absolute inset-0 rounded-lg bg-gradient-to-r  p-[1px]`}
@@ -222,11 +220,11 @@ const TechStack = () => {
                       {tech.icon}
                     </div>
                     <h3
-                      className={`font-bold text-cream mb-2 group-hover:bg-gradient-to-r group-hover:${tech.color} group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300`}
+                      className={`font-bold text-[#F3D3BE] mb-2 text-[#F3D3BE] group-hover:bg-gradient-to-r group-hover:${tech.color} group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300`}
                     >
                       {tech.name}
                     </h3>
-                    <p className="text-cream/60 text-sm mb-3">
+                    <p className="text-[#F3D3BE]/60 text-sm mb-3">
                       {tech.description}
                     </p>
 
@@ -238,8 +236,8 @@ const TechStack = () => {
                           : "max-h-0 opacity-0"
                       }`}
                     >
-                      <div className="pt-3 border-t border-cream/10">
-                        <p className="text-xs text-cream/50">{tech.details}</p>
+                      <div className="pt-3 border-t border-[#F3D3BE]/10">
+                        <p className="text-xs text-[#F3D3BE]/50">{tech.details}</p>
                       </div>
                     </div>
                   </div>
@@ -249,7 +247,7 @@ const TechStack = () => {
                     {[...Array(3)].map((_, i) => (
                       <div
                         key={i}
-                        className="absolute w-1 h-1 bg-cream/40 rounded-full animate-float"
+                        className="absolute w-1 h-1 bg-[#F3D3BE]/40 rounded-full animate-float"
                         style={{
                           left: `${20 + i * 30}%`,
                           top: `${20 + i * 20}%`,
@@ -288,7 +286,7 @@ const TechStack = () => {
                 <h3 className="text-4xl font-bold bg-gradient-to-r from-coral to-[#F3D3BE] bg-clip-text text-transparent mb-4">
                   Architecture Overview
                 </h3>
-                <p className="text-cream/70 text-lg">
+                <p className="text-[#F3D3BE]/70 text-lg">
                   From data to deployment in minutes, not months
                 </p>
               </div>
@@ -317,7 +315,7 @@ const TechStack = () => {
                       <div
                         className={`relative ${
                           step.bgColor
-                        } rounded-2xl p-6 border-white/10 transition-all duration-500  ${
+                        } rounded-2xl p-6 h-[300px] border-white/10 transition-all duration-500  ${
                           activeFlow === index
                             ? "shadow-2xl border-coral/50 bg-gradient-to-br from-white/10 to-white/5"
                             : activeFlow > index
@@ -375,7 +373,7 @@ const TechStack = () => {
                           {/* Content */}
                           <h4
                             className={`font-bold mb-2 text-lg transition-all duration-300 ${
-                              activeFlow === index ? "text-coral" : "text-cream"
+                              activeFlow === index ? "text-coral" : "text-[#F3D3BE]"
                             }`}
                           >
                             {step.title}
@@ -392,8 +390,8 @@ const TechStack = () => {
                           <p
                             className={`text-sm leading-relaxed transition-all duration-300 ${
                               activeFlow === index
-                                ? "text-cream/90"
-                                : "text-cream/60"
+                                ? "text-[#F3D3BE]/90"
+                                : "text-[#F3D3BE]/60"
                             }`}
                           >
                             {step.description}
@@ -410,7 +408,7 @@ const TechStack = () => {
                                 ? "text-coral scale-125 animate-pulse"
                                 : activeFlow === index
                                 ? "text-[#F3D3BE] scale-110"
-                                : "text-cream/40"
+                                : "text-[#F3D3BE]/40"
                             }`}
                           ></div>
                         </div>
@@ -435,7 +433,7 @@ const TechStack = () => {
                     <div className="text-3xl font-bold text-coral mb-2 group-hover:text-[#F3D3BE] transition-colors duration-300">
                       {stat.value}
                     </div>
-                    <div className="text-cream/60 text-sm group-hover:text-cream/80 transition-colors duration-300">
+                    <div className="text-[#F3D3BE]/60 text-sm group-hover:text-[#F3D3BE]/80 transition-colors duration-300">
                       {stat.label}
                     </div>
                   </div>

@@ -10,8 +10,8 @@ import TechStack from "@/components/TechStack";
 const Index = () => {
   return (
     <div className="min-h-screen">
-      <NavigationBar />
       <main className="">
+      <NavigationBar />
         <MouseLight
           bgColor="bg-charcoal"
           glowColor="rgba(255,135,50,0.08)"

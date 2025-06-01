@@ -1,51 +1,52 @@
 import { BorderBeam } from "./magicui/border-beam";
+import { useNavigate } from "react-router-dom";
 
 const featuresData: Feature[] = [
   {
-    id: "core",
-    icon: "⚡",
-    title: "ZeroCode Genesis Core",
+    id: "agribot",
+    icon: "🌾",
+    title: "AgriBot Assistant",
     description:
-      "Transform any data file into a complete, production-ready application. Upload your Excel, CSV, or JSON and watch IBM Granite AI work its magic.",
+      "Asisten cerdas untuk pertanian yang memberikan saran optimal berdasarkan kondisi tanaman dan cuaca, didukung oleh Granite AI.",
     color: "orange",
     points: [
       {
-        title: "Intelligent Code Generation",
-        desc: "Full-stack applications with React frontends, Node.js backends, and database schemas",
+        title: "Rekomendasi Cerdas",
+        desc: "Berikan rekomendasi pupuk, pestisida, dan tindakan pertanian berdasarkan data tanah, cuaca, dan tanaman.",
       },
       {
-        title: "Auto-Generated APIs",
-        desc: "RESTful endpoints with comprehensive CRUD operations and data validation",
+        title: "Deteksi Hama Otomatis",
+        desc: "Unggah gambar tanaman dan AgriBot akan mendeteksi jenis hama dan memberikan solusi yang tepat.",
       },
       {
-        title: "Instant Deployment",
-        desc: "One-click deployment to cloud platforms with CI/CD pipelines",
+        title: "Interaksi Natural",
+        desc: "Gunakan bahasa alami untuk bertanya dan mendapatkan jawaban real-time ",
       },
     ],
-    buttonText: "Try Core Demo",
+    buttonText: "Coba AgriBot",
   },
   {
-    id: "edu",
-    icon: "🧠",
-    title: "EduGen AI Module",
+    id: "harvestai",
+    icon: "📈",
+    title: "HarvestAI Predictor",
     description:
-      "Revolutionary educational companion that generates personalized quizzes, explanations, and learning paths from any uploaded content.",
+      "Sistem prediksi hasil panen berbasis AI yang memanfaatkan  kondisi saat ini untuk meningkatkan perencanaan pertanian.",
     color: "pink",
     points: [
       {
-        title: "Smart Question Generation",
-        desc: "Multi-choice, true/false, and open-ended questions from any document",
+        title: "Prediksi Hasil Panen",
+        desc: "Prediksi kuantitas dan waktu panen berdasarkan data historis, pola cuaca, dan kondisi tanaman.",
       },
       {
-        title: "Adaptive Learning",
-        desc: "Personalized difficulty adjustment based on performance analytics",
+        title: "Kalender Tanam Pintar",
+        desc: "Saran waktu tanam dan panen optimal berdasarkan lokasi geografis dan jenis tanaman.",
       },
       {
-        title: "Progress Tracking",
-        desc: "Comprehensive analytics dashboard with learning insights",
+        title: "Analitik Pertanian",
+        desc: "Tampilkan data visual untuk mendukung keputusan pertanian berbasis data.",
       },
     ],
-    buttonText: "Explore EduGen",
+    buttonText: "Lihat Prediksi",
   },
 ];
 
@@ -81,7 +82,7 @@ const FeatureCard = ({ feature }: { feature: Feature }) => {
       focusRing: "focus:ring-pink-500",
     },
   };
-
+  const navigate = useNavigate()
   const c = colorClasses[feature.color];
 
   return (
@@ -89,12 +90,12 @@ const FeatureCard = ({ feature }: { feature: Feature }) => {
       <div
         className={`backdrop-blur-lg border border-slate-700/50 rounded-2xl p-8 shadow-2xl  transition-all duration-300 h-[580px] flex flex-col justify-between`}
       >
-      <BorderBeam
-        duration={4}
-        size={100}
-        reverse
-        className={`from-transparent ${c.textGradient} to-transparent`}
-      />
+        <BorderBeam
+          duration={4}
+          size={100}
+          reverse
+          className={`from-transparent ${c.textGradient} to-transparent`}
+        />
         <div className="mb-6">
           <div
             className={`${c.bg} rounded-xl flex items-center justify-center w-16 h-16 mb-4`}
@@ -126,7 +127,8 @@ const FeatureCard = ({ feature }: { feature: Feature }) => {
         </div>
 
         <button
-          className={`${c.buttonBg} w-full text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 ${c.focusRing} focus:ring-offset-2 focus:ring-offset-slate-900`}
+          className={`${c.buttonBg} w-full mb-1 text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 ${c.focusRing} focus:ring-offset-2 focus:ring-offset-slate-900`}
+          onClick={() => navigate(`/login`)}
         >
           {feature.buttonText}
         </button>
@@ -136,20 +138,21 @@ const FeatureCard = ({ feature }: { feature: Feature }) => {
 };
 
 const Features = () => {
+  const navigate = useNavigate();
   return (
     <section className="py-20 px-4 relative bg-gradient-hero min-h-screen">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-bold mb-6">
-            <span className="text-amber-100">Dual-Powered</span>
+            <span className="text-amber-100">Resolusi Pertanian</span>
             <br />
             <span className="bg-gradient-to-r from-orange-400 to-pink-600 bg-clip-text text-transparent">
-              Innovation
+              Powered by AI
             </span>
           </h2>
           <p className="text-xl text-amber-100/70 max-w-3xl mx-auto">
-            Two revolutionary products working in harmony to transform how you
-            build and learn.
+            Dua fitur cerdas untuk membantu petani membuat keputusan lebih baik,
+            lebih cepat, dan lebih akurat.
           </p>
         </div>
 
@@ -168,16 +171,17 @@ const Features = () => {
               className="from-transparent via-blue-500 to-transparent"
             />
             <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent mb-4">
-              Perfect Integration
+              Harmoni Teknologi & Alam
             </h3>
             <p className="text-amber-100/70 text-lg max-w-3xl mx-auto mb-6">
-              Both modules work seamlessly together, powered by IBM Granite AI's
-              advanced language models. Generate applications and instantly
-              create educational content to help users understand the code.
+              AgriBot dan HarvestAI bekerja berdampingan untuk menciptakan
+              ekosistem pertanian yang cerdas. Dari rekomendasi harian hingga
+              prediksi panen — semuanya ditenagai oleh Granite AI.
             </p>
             <div className="flex justify-center">
-              <button className="px-8 py-3 bg-slate-700/50 border border-blue-500/30 text-blue-400 hover:bg-blue-500 hover:text-white transition-all duration-300 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900">
-                See Integration Demo
+              <button  onClick={() => navigate(`/login`)} className="px-8 py-3 bg-slate-700/50 border border-blue-500/30 text-blue-400 hover:bg-blue-500 hover:text-white transition-all duration-300 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900">
+
+                Lihat Kolaborasi Cerdas
               </button>
             </div>
           </div>

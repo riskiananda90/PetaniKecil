@@ -147,3 +147,9 @@ const Login = () => {
 };
 
 export default Login;
+
+
+// tyjakvxrqarmgoxscvvw
+// SUPABASE_URL = https://tyjakvxrqarmgoxscvvw.supabase.co
+// SUPABASE_ANON_KEY
+// api key : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5amFrdnhycWFybWdveHNjdnZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3NzE4NjYsImV4cCI6MjA2NDM0Nzg2Nn0.qveZsKbFKSOZnzhan_69QetyLgprJUtT17GlTu_97o0

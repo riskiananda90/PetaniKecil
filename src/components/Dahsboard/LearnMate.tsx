@@ -26,6 +26,7 @@ interface LearnmateProps {
 }
 
 const Learnmate = ({ onBack }: LearnmateProps) => {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const [selectedGrade, setSelectedGrade] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([
@@ -145,7 +146,7 @@ const Learnmate = ({ onBack }: LearnmateProps) => {
     setMessage("");
 
     try {
-      const response = await fetch("http://localhost:3001/api/text-prediksi", {
+      const response = await fetch(`${baseUrl}/api/text-prediksi`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

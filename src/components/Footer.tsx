@@ -15,15 +15,17 @@ export default function Footer() {
               HarapanDigital
             </h1>
           </div>
-          <p className="text-sm text-cream/70">
-            Turn your spreadsheets into fully working applications with the
-            power of AI and no-code.
+          <p className="text-sm text-[#F3D3BE]/70">
+            Solusi digital berbasis AI untuk mendukung petani dalam meningkatkan
+            produktivitas dan efisiensi pertanian modern.
           </p>
         </div>
 
-        {/* Navigation */}
+        {/* Navigasi */}
         <div>
-          <h2 className="text-lg font-semibold mb-3 text-cream">Navigation</h2>
+          <h2 className="text-lg font-semibold mb-3 text-[#F3D3BE]">
+            Navigasi
+          </h2>
           <ul className="space-y-2 text-sm">
             <li>
               <Link to="/demo" className="hover:text-coral transition">
@@ -32,20 +34,22 @@ export default function Footer() {
             </li>
             <li>
               <Link to="/get-started" className="hover:text-coral transition">
-                Get Started
+                Mulai
               </Link>
             </li>
             <li>
               <Link to="/features" className="hover:text-coral transition">
-                Features
+                Fitur
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Resources */}
+        {/* Sumber Daya */}
         <div>
-          <h2 className="text-lg font-semibold mb-3 text-cream">Resources</h2>
+          <h2 className="text-lg font-semibold mb-3 text-[#F3D3BE]">
+            Sumber Daya
+          </h2>
           <ul className="space-y-2 text-sm">
             <li>
               <a
@@ -64,45 +68,47 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="hover:text-coral transition"
               >
-                GitHub Repo
+                Repositori GitHub
               </a>
             </li>
             <li>
               <a href="/privacy-policy" className="hover:text-coral transition">
-                Privacy Policy
+                Kebijakan Privasi
               </a>
             </li>
           </ul>
         </div>
 
-        {/* Social Media */}
+        {/* Media Sosial */}
         <div>
-          <h2 className="text-lg font-semibold mb-3 text-cream">Connect</h2>
+          <h2 className="text-lg font-semibold mb-3 text-[#F3D3BE]">
+            Terhubung
+          </h2>
           <div className="flex space-x-4">
             <a
               href="https://twitter.com"
               target="_blank"
-              className="text-cream/60 hover:text-coral transition"
+              className="text-[#F3D3BE]/60 hover:text-coral transition"
             >
               <Twitter size={20} />
             </a>
             <a
               href="https://linkedin.com"
               target="_blank"
-              className="text-cream/60 hover:text-coral transition"
+              className="text-[#F3D3BE]/60 hover:text-coral transition"
             >
               <Linkedin size={20} />
             </a>
             <a
               href="https://github.com"
               target="_blank"
-              className="text-cream/60 hover:text-coral transition"
+              className="text-[#F3D3BE]/60 hover:text-coral transition"
             >
               <Github size={20} />
             </a>
             <a
               href="mailto:team@zerocode.com"
-              className="text-cream/60 hover:text-coral transition"
+              className="text-[#F3D3BE]/60 hover:text-coral transition"
             >
               <Mail size={20} />
             </a>
@@ -110,9 +116,9 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Line */}
-      <div className="mt-12 border-t border-cream/10 pt-6 text-center text-sm text-cream/50">
-        © {new Date().getFullYear()} HarapanDigital— All rights reserved💡
+      {/* Garis Bawah */}
+      <div className="mt-12 border-t border-[#F3D3BE]/10 pt-6 text-center text-sm text-[#F3D3BE]/50">
+        © {new Date().getFullYear()} HarapanDigital — Semua hak dilindungi💡
       </div>
     </footer>
   );

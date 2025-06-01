@@ -6,9 +6,6 @@ import {
   Send,
   Camera,
   Sprout,
-  Leaf,
-  Bug,
-  Droplets,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -26,6 +23,8 @@ type Product = {
   url: string;
 };
 const Agribot = ({ onBack }: AgribotProps) => {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
   const [message, setMessage] = useState("");
   const [isLoadImage, setIsloadimage] = useState("");
   const [chatMode, setChatMode] = useState("Pertanian");
@@ -42,13 +41,6 @@ const Agribot = ({ onBack }: AgribotProps) => {
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const quickTopics = [
-    { title: "Hama Tanaman", icon: Bug },
-    { title: "Pupuk & Nutrisi", icon: Leaf },
-    { title: "Irigasi", icon: Droplets },
-    { title: "Penyakit", icon: Sprout },
-  ];
-
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -80,26 +72,21 @@ const Agribot = ({ onBack }: AgribotProps) => {
 
     try {
       if (chatMode === "Pertanian") {
-        const response = await fetch(
-          "http://localhost:3001/api/text-prediksi",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              diagnosisText: message,
-              judul: chatMode,
-            }),
-          }
-        );
+        const response = await fetch(`${baseUrl}api/text-prediksi`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            diagnosisText: message,
+            judul: chatMode,
+          }),
+        });
         const data = await response.json();
 
         const botResponse = {
           type: "bot" as const,
-          content:
-            data.advice.parts[0].text ||
-            "Maaf, terjadi kesalahan saat memproses.",
+          content: data.advice || "Maaf, terjadi kesalahan saat memproses.",
           timestamp: new Date().toLocaleTimeString("id-ID", {
             hour: "2-digit",
             minute: "2-digit",
@@ -108,19 +95,16 @@ const Agribot = ({ onBack }: AgribotProps) => {
         };
         setMessages((prev) => [...prev, botResponse]);
       } else {
-        const response = await fetch(
-          "http://localhost:3001/api/text-prediksi",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              diagnosisText: message,
-              judul: chatMode,
-            }),
-          }
-        );
+        const response = await fetch(`${baseUrl}api/text-prediksi`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            diagnosisText: message,
+            judul: chatMode,
+          }),
+        });
         const data = await response.json();
         console.log(data.advice);
 
@@ -133,9 +117,13 @@ const Agribot = ({ onBack }: AgribotProps) => {
           }),
           Product: data.advice,
         };
+        console.log();
+
         setMessages((prev) => [...prev, botResponse]);
       }
-    } catch {
+    } catch (err) {
+      console.log(err);
+
       setMessages((prev) => [
         ...prev,
         {
@@ -170,27 +158,24 @@ const Agribot = ({ onBack }: AgribotProps) => {
       try {
         setTimeout(() => {
           setIsloadimage("Sabar ya ");
-          setTimeout(()=>{
+          setTimeout(() => {
             setIsloadimage("Sedikit lagi nih! ");
-          },20000)
+          }, 20000);
         }, 15000);
-        const response = await fetch(
-          "http://localhost:3001/api/image-prediksi",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              imageBase64: base64Image,
-            }),
-          }
-        );
+        const response = await fetch(`${baseUrl}api/image-prediksi`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            imageBase64: base64Image,
+          }),
+        });
         setIsloadimage("");
         const data = await response.json();
         setMessages((prev) => [
           ...prev,
           {
             type: "bot",
-            content: data.advice.parts[0].text || "Tidak ada hasil prediksi",
+            content: data.advice || "Tidak ada hasil prediksi",
             timestamp: new Date().toLocaleTimeString("id-ID", {
               hour: "2-digit",
               minute: "2-digit",
@@ -209,7 +194,7 @@ const Agribot = ({ onBack }: AgribotProps) => {
               hour: "2-digit",
               minute: "2-digit",
             }),
-            Product: []
+            Product: [],
           },
         ]);
       } finally {
@@ -219,11 +204,6 @@ const Agribot = ({ onBack }: AgribotProps) => {
 
     reader.readAsDataURL(file);
   };
-
-  const handleQuickTopic = (topic: string) => {
-    setMessage(`Saya ingin bertanya tentang ${topic.toLowerCase()}`);
-  };
-
   return (
     <div className="min-h-screen bg-charcoal  text-white">
       <div className="flex items-center justify-between p-6 border-b border-[rgba(255,135,50,0.08)]">
@@ -252,23 +232,37 @@ const Agribot = ({ onBack }: AgribotProps) => {
 
       <div className="flex h-[calc(100vh-80px)]">
         <div className="w-72 p-6 border-r border-[rgba(255,135,50,0.08)]">
-          <div className=" rounded-2xl p-6 border border-[rgba(255,135,50,0.08)]">
-            <h2 className="text-lg font-semibold mb-6 text-gray-200">
-              Topik Populer
+          <div className="rounded-2xl p-6 text-[13px] border border-[rgba(255,135,50,0.08)]">
+            <h2 className="text-sm font-semibold mb-6 text-gray-200">
+              Cara Penggunaan Agribot
             </h2>
-            <div className="space-y-3">
-              {quickTopics.map((topic, index) => (
-                <Button
-                  key={index}
-                  onClick={() => handleQuickTopic(topic.title)}
-                  variant="outline"
-                  className="w-full justify-start bg-transparent border-[rgba(255,135,50,0.08)] text-gray-300 hover:bg-gray-700 hover:border-green-500 hover:text-green-400 transition-all duration-200"
-                >
-                  <topic.icon className="w-4 h-4 mr-3" />
-                  {topic.title}
-                </Button>
-              ))}
-            </div>
+            <ul className="space-y-4 text-gray-300 list-disc list-inside">
+              <li>
+                <span className="text-white">
+                  Konsultasi Pertanian:
+                </span>
+                <br />
+                Ketik pertanyaan di kolom chat Agribot contoh: <i className=" text-green-600">  Bagaimana cara
+                merawat tanaman cabai?.</i> Jawaban akan muncul otomatis.
+              </li>
+              <li>
+                <span className="text-white">
+                  Deteksi Penyakit Tanaman:
+                </span>
+                <br />
+                Klik tombol <i className=" text-green-600">kamera</i>, unggah gambar tanamanmu,
+                lalu pilih jenis tanaman. Tunggu hingga hasil diagnosis muncul.
+              </li>
+              <li>
+                <span className="text-white">
+                  Rekomendasi Produk :
+                </span>
+                <br />
+                Klik tombol <i className=" text-green-600">Cari produk</i> lalu ketik di kolom chat product apa yang ingin anda cari, Agribot akan
+                menampilkan 5 produk rekomendasi. Klik produk untuk membuka di
+                Tokopedia.
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -304,42 +298,34 @@ const Agribot = ({ onBack }: AgribotProps) => {
                     <p className="text-sm leading-relaxed break-words break-all ">
                       <MarkdownRenderer markdownText={msg.content} />
                     </p>
-                    {msg.Product &&
-                      msg.Product.length > 0 && ( 
-                        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {msg.Product.map(
-                            (
-                              product: Product,
-                              index 
-                            ) => (
-                              <div
-                                key={index}
-                                className="border border-[rgba(255,135,50,0.08)] p-3 rounded shadow hover:border-green-700 cursor-pointer flex items-center gap-3"
-                                onClick={() =>
-                                  window.open(product.url, "_blank")
-                                }
-                              >
-                                <img
-                                  src={product.image}
-                                  alt={product.title}
-                                  className="w-20 h-20 object-cover rounded"
-                                />
-                                <div className="flex flex-col">
-                                  <span className="font-normal line-clamp-2 ">
-                                    {product.title}
-                                  </span>
-                                  <span className="text-green-700 font-bold">
-                                    {product.price}
-                                  </span>
-                                  <span className="text-sm text-gray-500">
-                                    {product.shop}
-                                  </span>
-                                </div>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      )}
+                    {msg && msg.Product.length > 0 && (
+                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {msg.Product.map((product: Product, index) => (
+                          <div
+                            key={index}
+                            className="border border-[rgba(255,135,50,0.08)] p-3 rounded shadow hover:border-green-700 cursor-pointer flex items-center gap-3"
+                            onClick={() => window.open(product.url, "_blank")}
+                          >
+                            <img
+                              src={product.image}
+                              alt={product.title}
+                              className="w-20 h-20 object-cover rounded"
+                            />
+                            <div className="flex flex-col">
+                              <span className="font-normal line-clamp-2 ">
+                                {product.title}
+                              </span>
+                              <span className="text-green-700 font-bold">
+                                {product.price}
+                              </span>
+                              <span className="text-sm text-gray-500">
+                                {product.shop}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                     <p className="text-xs mt-3 opacity-60">{msg.timestamp}</p>
                   </CardContent>
                 </Card>
