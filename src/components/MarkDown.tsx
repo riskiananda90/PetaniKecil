@@ -2,7 +2,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import remarkGfm from "remark-gfm";
 
 interface Props {
@@ -254,9 +254,7 @@ const components: Components = {
         <SyntaxHighlighter
           language={match[1]}
           PreTag="div"
-          wrapLongLines
-          style={oneDark}
-          {...props}
+          {...(props as SyntaxHighlighterProps)}
         >
           {codeString.replace(/\n$/, "")}
         </SyntaxHighlighter>
